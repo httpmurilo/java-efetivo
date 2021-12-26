@@ -1,4 +1,4 @@
-### Utilização de métodos static factory ao contrário do uso de construtores.
+### Utilização de métodos static factory ao contrário do uso de construtores - Item 1
 
 O modo tradicional leva em consideração a criação de um construtor público tradicional.
 
@@ -63,3 +63,30 @@ Não estão destacados na documentação da API do mesmo modo que os construtore
 
 `Adaptado`: Um bom ponto para contornar isso é respeitando as convenções comuns de nomenclatura. 
 
+Uns exemplos são ;
+
+`From` - Método de conversão de tipo que apresenta um único parâmetro e retorna uma instância correspondente desse tipo, por exemplo:
+
+`Date d = Date.From(instante)`.
+
+`Of` - Método de agregação que apresenta diversos parâmetros e retorna uma instância desse tipo que incorpora esses parâmetro:
+
+`Set<Rank> faceCards = EnumSet.of(JACK, QUEEN, KING);`
+
+`ValueOf` - Uma alternativa mais verbosa para o `from` e para o `of`:
+
+`BigInteger prime = BigInteger.valueOf(Integer.MAX_VALUE);`
+
+`Material complementar: Mais exemplos podem ser encontrados em https://jorgenringen.github.io/2018/01/factory_method_naming_conventions/.`
+
+### Cogite o uso de um builder quando se deparar com muitos parâmetros no construtor - Item 2.
+
+As `static factories` e os construtores compartilham uma limitação: não se adéquam bem a um grande número de parâmetros opcionais.
+
+Analise o caso de uma classe, aqui exemplificada como `NutritionFacts`, representando um daqueles rótulos de informações nutricionais vinculados nas embalagens de comida. Eles têm alguns campos obrigatórios - a quantidade da porção, a quantidade das porções por embalagem e as calorias por porção - e mais de 20 campos opcionais.
+
+Quais tipos de construtores ou métodos `static factory` você deveria escrever para essa classe? Tradicionalmente, os programadores têm usado o padrão `telescoping construtor`, no qual você fornece um construtor somente com os parâmetros necessários, outro com um único parâmetro opcional, e assim por diante.
+
+`Exemplo completo disponível em https://www.javatips.net/api/effective-java-examples-master/src/main/java/org/effectivejava/examples/chapter02/item02/builder/NutritionFacts.java.`
+
+`Nota: Esse tipo de padrão não é escalável`.
