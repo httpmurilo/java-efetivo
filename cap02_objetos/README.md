@@ -1,4 +1,4 @@
-### Utilização de métodos static factory ao contrário do uso de construroes.
+### Utilização de métodos static factory ao contrário do uso de construtores.
 
 O modo tradicional leva em consideração a criação de um construtor público tradicional.
 
@@ -26,4 +26,7 @@ Retornar objetos sem tornar suas classes públicas -> API Compacta.
 `Nota : O Autor usa API como uma referência a classes, interfaces, construtores, membros e aos objetos serializados dos quais um programador acessa uma classe, interface ou pacote.`
 
 D) Técnica compatível com frameworks baseados em interfaces-> Em que interfaces são os tipos de retornos naturais para os métodos `static factory`
+
+### Desvantagens
+
 
