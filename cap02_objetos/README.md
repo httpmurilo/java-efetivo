@@ -1,4 +1,4 @@
-### Utilização de métodos static factory ao contrário do uso de construtores - Item 1
+## Utilização de métodos static factory ao contrário do uso de construtores - Item 1
 
 O modo tradicional leva em consideração a criação de um construtor público tradicional.
 
@@ -43,7 +43,7 @@ Permite-se qualquer subtipo do tipo de retorno declarado, a classe do objeto ret
 
 E) Não precisa existir a classe do objeto retornado quando a classe contém o método de escrita.
 
-`Adaptado`: Esse tipo de comportamento está implementado na API do JDBC (Java Database Connectivity).
+`Trecho adaptado `: Esse tipo de comportamento está implementado na API do JDBC (Java Database Connectivity).
 
 `Comentário pessoal: F) Complemento que uma das vantagens do uso do static factory, é a utilização de valores padrões nos construtores e mover a lógica para fora dos construtores, princípio da responsabilidade única.`
 
@@ -55,13 +55,13 @@ Impossível dividir em subclasses qualquer uma das classes pertinentes à implem
 
 `Comentário pessoal: Composição é quando um Objeto de uma Classe X utiliza recursos de outro Objeto de uma Classe Y. Ou seja, a Composição é uma técnica de reutilização de código sem acoplamento entre Classes. Herança é uma técnica de reutilização de código com acoplamento entre as Classes.`
 
-`Material complementar: https://www.journaldev.com/1325/composition-in-java-example`.
+`Material complementar: https://www.journaldev.com/1325/composition-in-java-example`[EN].
 
 B) Difíceis de serem encontrados pelos programadores.
 
 Não estão destacados na documentação da API do mesmo modo que os construtores, por esse motivo pode ser difícil descobrir como instanciar uma classe que forneça de métodos `static factory` em vez de construtores.
 
-`Adaptado`: Um bom ponto para contornar isso é respeitando as convenções comuns de nomenclatura. 
+`Trecho adaptado `: Um bom ponto para contornar isso é respeitando as convenções comuns de nomenclatura. 
 
 Uns exemplos são ;
 
@@ -77,9 +77,9 @@ Uns exemplos são ;
 
 `BigInteger prime = BigInteger.valueOf(Integer.MAX_VALUE);`
 
-`Material complementar: Mais exemplos podem ser encontrados em https://jorgenringen.github.io/2018/01/factory_method_naming_conventions/.`
+`Material complementar: Mais exemplos podem ser encontrados em https://jorgenringen.github.io/2018/01/factory_method_naming_conventions/ [EN].`
 
-### Cogite o uso de um builder quando se deparar com muitos parâmetros no construtor - Item 2.
+## Cogite o uso de um builder quando se deparar com muitos parâmetros no construtor - Item 2.
 
 As `static factories` e os construtores compartilham uma limitação: não se adéquam bem a um grande número de parâmetros opcionais.
 
@@ -87,6 +87,70 @@ Analise o caso de uma classe, aqui exemplificada como `NutritionFacts`, represen
 
 Quais tipos de construtores ou métodos `static factory` você deveria escrever para essa classe? Tradicionalmente, os programadores têm usado o padrão `telescoping construtor`, no qual você fornece um construtor somente com os parâmetros necessários, outro com um único parâmetro opcional, e assim por diante.
 
-`Exemplo completo disponível em https://www.javatips.net/api/effective-java-examples-master/src/main/java/org/effectivejava/examples/chapter02/item02/builder/NutritionFacts.java.`
+`Exemplo completo disponível em https://www.javatips.net/api/effective-java-examples-master/src/main/java/org/effectivejava/examples/chapter02/item02/telescopingconstructor/NutritionFacts.java.`
 
 `Nota: Esse tipo de padrão não é escalável`.
+
+Concluindo, o padrão telescoping constructor funciona, mas é difícil escrever o código do cliente quando se tem muitos parâmetros, e é ainda mais difícil de o ler.
+
+Uma segunda alternativa quando se deparar com muitos parâmetros opcionais em um construtor é o padrão `JavaBeans`. Nele, você chama um construtor sem parâmetros para criar o objeto e, em seguida chama os métodos setter para definir cada parâmetro obrigatório e cada parâmetro opcional de interesse.
+
+`Comentário do autor: //Padrão Java Beans - Permite a inconsistência, autoriza a mutabilidade`
+
+`Exemplo completo disponível em https://www.javatips.net/api/effective-java-examples-master/src/main/java/org/effectivejava/examples/chapter02/item02/javabeans/NutritionFacts.java.`
+
+`Material complementar - Oque é um JavaBean exatamente[EN] - https://stackoverflow.com/questions/3295496/what-is-a-javabean-exactly`.
+
+Esse padrão não tem nenhuma das desvantagens que o padrão `telescoping constructor` apresenta. Com ele é fácil, embora um tanto prolixo, de criar instâncias, e de ler o código resultante:
+
+```
+NutritionFacts cocaCola = new NutritionFacts();
+cocaCola.setServingSize(240);
+cocaCola.setServings(8);
+cocaCola.setCalories(100);
+cocaCola.setSodium(35);
+cocaCola.setCarbohydrate(27);
+```
+
+O padrão `JavaBeans` apresenta graves desvantagens, sendo elas :
+
+- Construção dividida em várias chamadas
+
+Um `JavaBean` pode apresentar um estado parcialmente inconsistente durante sua construção. A classe não tem a opção de implementar a consistência apenas verificando a validade dos parâmetros do construtor. As tentativas de usar um objeto quando ele apresenta um estado inconsistente podem causar falhas que estarão bem distantes do código com o bug, e serão difíceis de depurar. Uma das desvantagens que reside nesse fato é que o padrão `JavaBeans` exclui a possibilidade de uma classe ser imutável, e exige, um esforço complementar a fim de garantir a segurança da thread.
+
+
+É possivel minimizar essas desvantagens congelando o objeto quando sua construção está completa e não permitindo o uso dele até estar congelado.
+
+`Trecho adaptado`: O padrão `builder` une a segurança do padrão `telescoping constructor` com a legibilidade do padrão `JavaBeans`. A ideia é que a criação de um objeto complexo seja segredado em diversos pedacinhos. Dado a quantidade de material desse padrão, não irei me estender sobre esse tópico.
+
+`Material complementar - Builder em Java[PT-BR/EN] - https://refactoring.guru/pt-br/design-patterns/builder/java/example`.
+`Material complementar - Padrões de Projetos: Soluções Reutilizáveis de Software Orientado a Objetos - Cap 3 Padrões de Criação - pag104 - Builder `.
+
+O padrão `builder` se adequa bem nas hierarquivas de classe. Use uma hierarquia paralela de builders, onde as classes abstratas tem builders abstratos, as classes concretas, builder concetros.
+
+### Vantagens
+
+- Em relação aos construtores, builders apresentam diversos parâmetros de `varargs`, pois cada parâmetro é especificado no próprio método.
+
+`Nota` : `vargs` consiste em um parâmetro que pode receber 0, um array ou muitos parâmetros.
+
+- Builders podem agregar os parâmetros passados em múltiplas chamadas de um método dentro de um único campo.
+
+- Flexível : um builder pode ser usado várias vezes para criar inúmeros objetos.
+
+### Desvantagens
+
+- Para a criação de um objeto, deve criar primeiro um builder.
+
+- Desempenho, embora seja pouco provável que o custo de criação desse builder seja considerável na prática, isso pode ser um problema em situações críticas de desempenho.
+
+`Análise pessoal:` Usando uma pequena entidade os testes usando construtores e o padrão `builder` foi metido o tempo de execução com o `Google Guava`. A tabela abaixo demostra o resultado dos testes :
+
+
+
+| Construtor    | Tempo em ms   |
+| ------------- |:-------------:|
+| Padrão        | 4,648         |
+| Builder       | 8,959         |
+
+`Obs: Para o teste foi utilizado o jdk 17 para a arquitetura x86_64 para a plataforma Linux.`

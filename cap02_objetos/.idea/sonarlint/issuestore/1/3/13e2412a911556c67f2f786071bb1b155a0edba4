@@ -1,23 +1,0 @@
-
-W
-java:S1854"<Remove this useless assignment to local variable "alunoSM1".(ºˆÄËşÿÿÿÿ
-V
-java:S1854";Remove this useless assignment to local variable "alunoSM".(ÿ¡­¤øÿÿÿÿ
-P
-java:S1854":Remove this useless assignment to local variable "aluno3".(İÆÊ”
-O
-java:S1854":Remove this useless assignment to local variable "aluno2".(óùÿ@
-O
-java:S1854"9Remove this useless assignment to local variable "aluno".(£”·Ø
-@
-java:S1481"*Remove this unused "aluno" local variable.(£”·Ø
-@
-java:S1481"+Remove this unused "aluno2" local variable.(óùÿ@
-A
-java:S1481"+Remove this unused "aluno3" local variable.(İÆÊ”
-G
-java:S1481",Remove this unused "alunoSM" local variable.(ÿ¡­¤øÿÿÿÿ
-H
-java:S1481"-Remove this unused "alunoSM1" local variable.(ºˆÄËşÿÿÿÿ
-a
-java:S1192"KDefine a constant instead of duplicating this literal "SÃ£o Paulo" 3 times.(£”·Ø

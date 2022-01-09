@@ -18,5 +18,8 @@ Lista dos materiais de referentes a cada capítulo.
 ### Capítulo 02 - [Criar e Destruir Objetos](./cap02_objetos/README.md)
 
 **Importante!**
-Esse repositório foi construído como um material de estudos pessoal.
+Esse repositório foi construído como um material de estudos pessoal. O crédito é totalmente do autor do livro, da tradução e dos criadores das postagens/respostas dos links extraidos que são usados como material de leitura complementar.
+
+Esse repósitorio não é uma cópia verossímil do livro do Boch.
+
 Fique a vontade para consultar, copiar e sugerir.
