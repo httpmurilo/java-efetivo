@@ -1,4 +1,4 @@
-## Utilização de métodos static factory ao contrário do uso de construtores - Item 1
+## Utilização de métodos static factory ao contrário do uso de construtores - Item 1.
 
 O modo tradicional leva em consideração a criação de um construtor público tradicional.
 
@@ -153,4 +153,14 @@ O padrão `builder` se adequa bem nas hierarquivas de classe. Use uma hierarquia
 | Padrão        | 4,648         |
 | Builder       | 8,959         |
 
-`Obs: Para o teste foi utilizado o jdk 17 para a arquitetura x86_64 para a plataforma Linux.`
+`Obs: Para o teste foi utilizado o jdk 17 para a arquitetura x86_64 para a plataforma Linux. A entidade pode ser consultada em (Main.Java)[https://github.com/httpmurilo/java-efetivo/blob/main/cap02_objetos/exemplos/builder/src/com/mercado/Main.java]`.
+
+- O padrão `buider` é considerado mais verboso do que o padrão `telescoping constructor`, isso significa que o padrão `builder` só deve ser usado se existe parâmetros suficientes que justifiquem o seu uso, + 4 parâmetros.
+
+`Nota pessoal: Precisamos lembrar que conforme o sistema vai crescendo/tomando forma, as entidades tendem a crescer conforme a necessidade do sistema vai aumentando. A recomendação do livro é que frequentemente devemos considerar que seja melhor já começar com um builder, pois ao se começar com static factories ou construtores, pode-se chegar a um ponto que a quantidade de parâmetros saia do nosso controle. Nesse sentido, evitamos refatoração/dívida técnica`.
+
+- O padrão `builder` é uma boa opção para projetar classes cujo construtores ou `static factories` tenham poucos parâmetros, especialmente se muito parâmetros forem opcionais ou do tipo idêntico.
+
+`Conclusão: concluem-se que o padrão builder torna a leitura/manutenção do código mais simples  e possui um nível maior de segurança do que se compararmos com o telescoping constructor e JavaBeans.`
+
+## Implemente a propriedade de um singleton com um construtor privado ou um tipo enum - Item 3.
