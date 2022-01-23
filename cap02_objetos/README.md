@@ -164,3 +164,23 @@ O padrão `builder` se adequa bem nas hierarquivas de classe. Use uma hierarquia
 `Conclusão: concluem-se que o padrão builder torna a leitura/manutenção do código mais simples  e possui um nível maior de segurança do que se compararmos com o telescoping constructor e JavaBeans.`
 
 ## Implemente a propriedade de um singleton com um construtor privado ou um tipo enum - Item 3.
+
+Um singleton é uma classe instanciada exatamente uma vez. Os singletons representam tanto um objeto sem estado que executa tarefas como uma função, ou um componente do sistema intrinsecamente único.
+
+Existe duas formas tradicionais de implementar os singletons. Ambas são baseadas em manter o construtor privado e exportar os membros estáticos púbicos para permitir acesso à instância única.
+
+### No primeiro exemplo, o membro público é um campo final:
+
+<script src="https://gist.github.com/httpmurilo/6f0a9d67f64667c0c9b876a05779de8b.js"></script>
+
+É chamado o construtor privado apenas uma vez para inicializar o campo final estático Student.
+
+A ausência de um construtor público ou de um construtor protegido garante que existirá somente uma instância de Student. Contudo, um desenvolvedor poderá invocar o construtor privado premeditamente com o auxílio do método `AcessibleObject.setAcessible`. Nesses cenários, para impedir a criação de uma segunda instância poderá ser usado uma exceção caso alguém tente criar uma segunda instância.
+
+### No segundo exemplo, o membro público é um método static factory (rever item 1):
+
+Todas as chamadas para Student.getInstance retornam a mesma referência de objeto, e nenhuma outra instância jamais será criada. Com a exceção do uso do `AcessibleObject.setAcessible`.
+
+<script src="https://gist.github.com/httpmurilo/9dded421ca7f9f5262a5cb6f1bb9583e.js"></script>
+
+A principal vantagem da abordagem de campo público é que a API deixa bem claro que a classe é um singleton: o campo estático público é final, portanto, sempre terá a mesma referência de objeto. A segunda vantagem é que é mais simples.
