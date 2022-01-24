@@ -171,7 +171,17 @@ Existe duas formas tradicionais de implementar os singletons. Ambas são baseada
 
 ### No primeiro exemplo, o membro público é um campo final:
 
-<script src="https://gist.github.com/httpmurilo/6f0a9d67f64667c0c9b876a05779de8b.js"></script>
+```java
+package io.murilo.school.model;
+
+public class Student {
+    public static final Student INSTANCE = new Student();
+
+    private Integer id;
+    private String name;
+    private Integer age;
+}
+```
 
 É chamado o construtor privado apenas uma vez para inicializar o campo final estático Student.
 
@@ -179,8 +189,84 @@ A ausência de um construtor público ou de um construtor protegido garante que 
 
 ### No segundo exemplo, o membro público é um método static factory (rever item 1):
 
+```java
+package io.murilo.school.model;
+
+public class Student {
+    private static final Student INSTANCE = new Student();
+  
+    private Student() {
+      ...
+      public static Student getInstance(); 
+    }
+    private Integer id;
+    private String name;
+    private Integer age;
+    
+}
+```
+
 Todas as chamadas para Student.getInstance retornam a mesma referência de objeto, e nenhuma outra instância jamais será criada. Com a exceção do uso do `AcessibleObject.setAcessible`.
 
-<script src="https://gist.github.com/httpmurilo/9dded421ca7f9f5262a5cb6f1bb9583e.js"></script>
+```java
+package io.murilo.school.model;
+
+public class Student {
+    private static final Student INSTANCE = new Student();
+  
+    private Student() {
+      ...
+      public static Student getInstance(); 
+    
+    }
+    private Integer id;
+    private String name;
+    private Integer age;
+    
+}
+```
 
 A principal vantagem da abordagem de campo público é que a API deixa bem claro que a classe é um singleton: o campo estático público é final, portanto, sempre terá a mesma referência de objeto. A segunda vantagem é que é mais simples.
+
+Sobre a abordagem do uso de `statics factorys`, possui três vantagens principais, sendo elas:
+
+- Flexibilidade para mudar a implementação singleton, sem alterar a sua API. O método pode ser facilmente modificado para retornar uma instância separada para cada thread que a invoca.
+
+- Pode-se criar fábricas genéricas de singleton, conforme o exemplo abaixo:
+
+```java
+public class GenericSingletonFactory {
+	// Generic singleton factory pattern
+	private static UnaryFunction<Object> IDENTITY_FUNCTION = new UnaryFunction<Object>() {
+		public Object apply(Object arg) {
+			return arg;
+		}
+	};
+
+	// IDENTITY_FUNCTION is stateless and its type parameter is
+	// unbounded so it's safe to share one instance across all types.
+	@SuppressWarnings("unchecked")
+	public static <T> UnaryFunction<T> identityFunction() {
+		return (UnaryFunction<T>) IDENTITY_FUNCTION;
+	}
+
+	// Sample program to exercise generic singleton
+	public static void main(String[] args) {
+		String[] strings = { "jute", "hemp", "nylon" };
+		UnaryFunction<String> sameString = identityFunction();
+		for (String s : strings)
+			System.out.println(sameString.apply(s));
+
+		Number[] numbers = { 1, 2.0, 3L };
+		UnaryFunction<Number> sameNumber = identityFunction();
+		for (Number n : numbers)
+			System.out.println(sameNumber.apply(n));
+	}
+}
+```
+
+`Obs:` exemplo extraído do próprio livro. Créditos do autor.
+
+- Referência de método, a uma vantagem de usar a `static factory` é que uma referência de método pode ser usada como `supplier`, por exemplo `Student::instance` é um `Supplier<Student>`.
+
+`Nota:` A interface `Supplier` nada mais é do que uma interface funcional, basicamente ela não aceita argumentos e retorna um resultado. Fonte (Receitas de código)[https://receitasdecodigo.com.br/java/exemplos-supplier-java-8]
