@@ -39,7 +39,7 @@ Permite-se qualquer subtipo do tipo de retorno declarado, a classe do objeto ret
 
 `A classe EnumSet não apresenta construtores públicos, somente static factories. No OpenJDK, retorna uma instância de duas subclasses, dependendo do tamanho do tipo enum subjacente. Os clientes não sabem e nem se preocupam com a classe do objeto que retornam da fábrica; eles só se preocupam que seja alguma subclasse do enum.`
 
-`Material complementar: Esse comportamento está descrito nesse fonte,http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/7d1d5f4d019a/src/share/classes/java/util/EnumSet.java#l115`.
+`Material complementar: Esse comportamento está descrito nessa` [fonte] (http://hg.openjdk.java.net/jdk8u/jdk8u/jdk/file/7d1d5f4d019a/src/share/classes/java/util/EnumSet.java#l115).
 
 E) Não precisa existir a classe do objeto retornado quando a classe contém o método de escrita.
 
@@ -153,7 +153,7 @@ O padrão `builder` se adequa bem nas hierarquivas de classe. Use uma hierarquia
 | Padrão        | 4,648         |
 | Builder       | 8,959         |
 
-`Obs: Para o teste foi utilizado o jdk 17 para a arquitetura x86_64 para a plataforma Linux. A entidade pode ser consultada em (Main.Java)[https://github.com/httpmurilo/java-efetivo/blob/main/cap02_objetos/exemplos/builder/src/com/mercado/Main.java]`.
+`Obs: Para o teste foi utilizado o jdk 17 para a arquitetura x86_64 para a plataforma Linux. A entidade pode ser consultada em` [Main.java](https://github.com/httpmurilo/java-efetivo/blob/main/cap02_objetos/exemplos/builder/src/com/mercado/Main.java).
 
 - O padrão `buider` é considerado mais verboso do que o padrão `telescoping constructor`, isso significa que o padrão `builder` só deve ser usado se existe parâmetros suficientes que justifiquem o seu uso, + 4 parâmetros.
 
@@ -269,4 +269,47 @@ public class GenericSingletonFactory {
 
 - Referência de método, a uma vantagem de usar a `static factory` é que uma referência de método pode ser usada como `supplier`, por exemplo `Student::instance` é um `Supplier<Student>`.
 
-`Nota:` A interface `Supplier` nada mais é do que uma interface funcional, basicamente ela não aceita argumentos e retorna um resultado. Fonte (Receitas de código)[https://receitasdecodigo.com.br/java/exemplos-supplier-java-8]
+`Nota:` A interface `Supplier` nada mais é do que uma interface funcional, basicamente ela não aceita argumentos e retorna um resultado. Fonte [Receitas de código](https://receitasdecodigo.com.br/java/exemplos-supplier-java-8).
+
+O autor complementa, que ao menos, que uma dessas vantagens seja relevantes, a abordagem do campo público é mais aconselhável.
+
+Obs: Para tornar uma classe singleton serializável onde é usada uma dessas qualquer abordagem, não é suficiente somente informar o `implements Serializable` à sua declaração.
+
+### Singleton como Enum
+
+Uma terceira abordagem de implementar um singleton é declarar um enum como um elemento único.
+
+```java
+public enum Student {
+	INSTANCE;
+	...
+	public void addAverage(){}
+}
+```
+
+Benefícios:
+
+- Semelhante à do campo público, porém é mais concisa.
+- Maneira descomplicada de serialização.
+- Oferece garantia contra as instâncias múltiplas, mesmo em casos de ataques sofisticados de serialização ou ataques por reflexão.
+- Um tipo enum de elemento único é muitas vezes a melhor forma de implementar um singleton.
+
+Não pode empregá-la caso seu singleton deva estender outra superclasse que não seja a Enum.
+
+### Item 4: Implemente a não instanciação através de construtores privados
+
+Essa necessidade surge, quando queremos criar classes que sejam apenas um agrupamento de métodos e campos estáticos. Elas podem ser usadas para agrupar métodos relacionados aos valores primitivos ou arrays, como as de `java.lang.Math` ou `java.util.Arrays`. Também podem ser utilizadas para agrupar métodos estáticos, incluindo fábricas.
+
+Pode-se fazer com que uma classe seja não instanciável através da inclusã de construtores privados. Na ausência de construtores explícitos, no momento da compilação, o compilador fornece un construtor padrão público, sem parâmetros.
+
+```java
+//Classe utilitária não instancíavel
+public class UtilityClass {
+	//suprima o construtor padrão para a não instanciação
+	private UtilityClasse() {
+		throw new AssertionError();
+	}
+	//omitido
+}
+```
+Exemplo extraído do próprio livro.
