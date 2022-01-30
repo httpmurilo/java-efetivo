@@ -1,4 +1,4 @@
-## Utilização de métodos static factory ao contrário do uso de construtores - Item 1.
+## Item 1 : Utilização de métodos static factory ao contrário do uso de construtores
 
 O modo tradicional leva em consideração a criação de um construtor público tradicional.
 
@@ -79,7 +79,7 @@ Uns exemplos são ;
 
 `Material complementar: Mais exemplos podem ser encontrados em https://jorgenringen.github.io/2018/01/factory_method_naming_conventions/ [EN].`
 
-## Cogite o uso de um builder quando se deparar com muitos parâmetros no construtor - Item 2.
+## Item 2 : Cogite o uso de um builder quando se deparar com muitos parâmetros no construtor
 
 As `static factories` e os construtores compartilham uma limitação: não se adéquam bem a um grande número de parâmetros opcionais.
 
@@ -313,3 +313,11 @@ public class UtilityClass {
 }
 ```
 Exemplo extraído do próprio livro.
+
+### Item 5: Dê preferência à injeção de dependência para integrar recursos
+
+Não é raro ver essas classes implementadas como classes utilitárias estáticas. As classes utilitárias estáticas e os singletons são inapropriados para as classes cujo comportamento é parametrizado por um recurso subjacente.
+
+Não deve ser utilizado um singleton ou uma classe utilitária estática para implementar uma classe que depende de um ou mais recursos subjacentes cujo comportamento afete o da classe, fazendo com que ela acabe criando esses recursos diretamente. Em vez disso, passe os recursos ou as fábricas para o construtor para criá-los. Essa prática, conhecida como injeção de dependência, potencializará de modo significativo a flexibilidade, a reutilização e a testabilidade de uma classe.
+
+### Item 6: Evite a criação de objetos desnecessários
